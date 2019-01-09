@@ -1,5 +1,7 @@
 # UCLA CompSci 35L
 
+Disclaimer: Don't copy this.
+
 Assignment  1   97 / 100    11/30/2018
 
 Assignment  2   92 / 100	  11/30/2018	 	 
