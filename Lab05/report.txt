@@ -1,0 +1,224 @@
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+~~~~~~~~~~~~~~~~~~~~~LAB.TXT~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+PART 1
+Since we are implementing tr, the first thing to do would be to test it out.
+man tr would allow us to see how it's supposed to be used.
+tr "abc" "def"
+Testing this would allow us to see that typing in anything with an a, b or c would give us a result with that letter replaced by a d, e or f respectively.
+Make sure we code this right, following the rules that tr2b.c must use getchar and putchar for the input and output.
+Plan this out, we must watch for correct arguments, and make sure that there are no repeats in the first argument because one letter can not translate to multiple different letters.
+Characters will be treated as bytes because of the spec, to make things easier.
+Once you are finished writing this program, you can test to make sure the functionallity is the same as the original.
+gcc -o tr2b tr2b.c
+chmod 777 tr2b
+./tr2b "abcdefg" "hijklmn"
+Test with things like that and see if it works like it should and it does seem to work.
+
+PART 2
+It should be pretty similar to part one I would think so the first thing to do is to copy the tr2b.c
+cp tr2b.c tr2u.c
+Then you go in and find out what's up with all this read and write stuff, which is actually unistd.h read and write.
+Basically, its the same thing except the read and write syntax is different so you replace those.
+Checking for read errors is also a little bit different beacuse it's a return value from the read and write functions themselves.
+It's just a matter of replacing all the getchar and putchar functions with read and write functions.
+
+PART 3
+Learn how to use the strace command starting with the manual
+man strace
+See that you want to use the -c command to get all the information about running the programs
+Create a new large file with at least 5 Million Bytes
+Run the command to compare the amount of system calls
+
+strace -c ./tr2b "a" "b" < big.txt > out
+% time     seconds  usecs/call     calls    errors syscall
+------ ----------- ----------- --------- --------- ----------------
+ 47.46    0.000383           1       765           write
+ 28.87    0.000233           0       767           read
+  6.57    0.000053           6         9           mmap
+  3.97    0.000032          32         1           execve
+  3.35    0.000027           7         4           mprotect
+  2.35    0.000019          10         2           open
+  2.23    0.000018          18         1         1 access
+  2.11    0.000017           4         4           fstat
+  1.24    0.000010          10         1           munmap
+  0.87    0.000007           7         1           brk
+  0.62    0.000005           3         2           close
+  0.37    0.000003           3         1           arch_prctl
+------ ----------- ----------- --------- --------- ----------------
+100.00    0.000807                  1558         1 total
+
+strace -c ./tr2u "a" "b" < big.txt > out
+% time     seconds  usecs/call     calls    errors syscall
+------ ----------- ----------- --------- --------- ----------------
+ 55.57   25.496655           4   6266640           write
+ 44.43   20.388667           3   6266642           read
+  0.00    0.000000           0         2           open
+  0.00    0.000000           0         2           close
+  0.00    0.000000           0         2           fstat
+  0.00    0.000000           0         7           mmap
+  0.00    0.000000           0         4           mprotect
+  0.00    0.000000           0         1           munmap
+  0.00    0.000000           0         1           brk
+  0.00    0.000000           0         1         1 access
+  0.00    0.000000           0         1           execve
+  0.00    0.000000           0         1           arch_prctl
+------ ----------- ----------- --------- --------- ----------------
+100.00   45.885322              12533304         1 total
+
+You realize there are way mroe system calls in tr2u compared to tr2b because all those read and writes are system calls which slow it down
+Then try to test this in the terminal without trying to copy one file to another and see what happens
+strace -c ./tr2b "a" "b" < big.txt
+First it prints out all the translated lines like it should and then it gives the result at the end
+% time     seconds  usecs/call     calls    errors syscall
+------ ----------- ----------- --------- --------- ----------------
+ 99.58    0.849423           4    200000           write
+  0.39    0.003367           4       767           read
+  0.01    0.000058           6         9           mmap
+  0.01    0.000049          49         1           execve
+  0.01    0.000044          44         1           brk
+  0.00    0.000029           7         4           mprotect
+  0.00    0.000023          12         2           open
+  0.00    0.000016           4         4           fstat
+  0.00    0.000012          12         1         1 access
+  0.00    0.000010          10         1           munmap
+  0.00    0.000006           3         2           close
+  0.00    0.000003           3         1           arch_prctl
+------ ----------- ----------- --------- --------- ----------------
+100.00    0.853040                200793         1 total
+
+strace -c ./tr2u "a" "b" < big.txt
+After printing out all of the lines that it's supposed to output, you get
+% time     seconds  usecs/call     calls    errors syscall
+------ ----------- ----------- --------- --------- ----------------
+ 56.51   27.482998           4   6266640           write
+ 43.49   21.153214           3   6266642           read
+  0.00    0.000087          12         7           mmap
+  0.00    0.000047          47         1           brk
+  0.00    0.000032           8         4           mprotect
+  0.00    0.000015           8         2           open
+  0.00    0.000014          14         1           execve
+  0.00    0.000011          11         1         1 access
+  0.00    0.000010          10         1           munmap
+  0.00    0.000006           3         2           close
+  0.00    0.000006           3         2           fstat
+  0.00    0.000003           3         1           arch_prctl
+------ ----------- ----------- --------- --------- ----------------
+100.00   48.636443              12533304         1 total
+
+The way tr2b works, there are more outputs when it has to write to terminal due to the way putchar has to function,
+compared to tr2u which has the same amount of calls regardless of where the output is going to.
+Either way however, tr2b is a lot faster because it doesn't have to deal with all the read and write functions in the same way that tr2u does.
+
+PART 4
+Use the time command to see how much faster one is compared to the other
+Run the same tests as before but now we can ignore the strace and use time instead
+time ./tr2b "a" "b" < big.txt > out
+real    0m0.333s
+user    0m0.260s
+sys     0m0.018s
+time ./tr2u "a" "b" < big.txt > out
+real    0m12.320s
+user    0m1.721s
+sys     0m10.543s
+time ./tr2b "a" "b" < big.txt
+real    0m3.016s
+user    0m0.408s
+sys     0m0.309s
+time ./tr2u "a" "b" < big.txt
+real    0m10.987s
+user    0m1.618s
+sys     0m9.354s
+Looking at the results, it's pretty simple to see that the buffered tr is much faster than the unbuffered one.
+
+
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+~~~~~~~~~~~~~~~~~~~~~SFROB.TXT~~~~~~~~~~~~~~~~~~~~~~~~~~~
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+
+small.txt is a small text file with
+1 line and about 10 words
+it should be small enough to test speeds
+if there is low amounts of data
+
+time cat small.txt | ./sfrob
+real    0m0.002s
+user    0m0.000s
+sys     0m0.003s
+
+time cat small.txt | ./sfrobu
+real    0m0.003s
+user    0m0.002s
+sys     0m0.002s
+
+time cat small.txt | ./sfrobs
+real    0m0.006s
+user    0m0.004s
+sys     0m0.005s
+
+time cat small.txt | ./sfrobu -f
+real    0m0.004s
+user    0m0.002s
+sys     0m0.002s
+
+time cat small.txt | ./sfrobs -f
+real    0m0.005s
+user    0m0.004s
+sys     0m0.005s
+
+Speed Ranking
+sfrob
+sfrobu
+sfrobu -f
+sfrobs -f
+
+
+
+big.txt is a large text file with
+200,000 lines and about 1,000,000 words
+it should be large enough to test the overall speeds
+of these programs as the data goes to infinity
+
+time cat big.txt | ./sfrob
+real    0m4.612s
+user    0m1.681s
+sys     0m0.367s
+
+time cat big.txt | ./sfrobu
+real    0m12.064s
+user    0m3.128s
+sys     0m8.940s
+
+time cat big.txt | ./sfrobs
+real    0m2.386s
+user    0m0.348s
+sys     0m0.218s
+
+time cat big.txt | ./sfrobu -f
+real    0m12.561s
+user    0m3.639s
+sys     0m8.920s
+
+time cat big.txt | ./sfrobs -f
+real    0m3.085s
+user    0m0.505s
+sys     0m0.214s
+
+Speed Ranking
+sfrobs
+sfrobs -f
+sfrob
+sfrobu
+sfrobu -f
+
+
+
+
+
+

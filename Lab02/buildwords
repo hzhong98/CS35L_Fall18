@@ -1,0 +1,17 @@
+#!/bin/bash
+
+grep -E '<td>.+<\/td>' |
+sed -n '1~2!p' |
+
+tr [:upper:] [:lower:] |
+tr '\`' "\'" |
+sed 's/<td>//g' |
+sed 's/<\/td>//g' |
+sed 's/<u>//g' |
+sed 's/<\/u>//g' |
+
+tr ' ,' '\n' |
+sed "/[^pk\'mnwlhaeiou]/d" |
+sed '/^$/d' |
+
+sort -u

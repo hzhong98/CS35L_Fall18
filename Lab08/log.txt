@@ -1,0 +1,82 @@
+The first thing I had to do was hard reset the beaglebone green.
+Then plug the beagle bone into my computer and open it and go to
+the website where you can set up the beaglebone which isn't really
+needed since I was running on a linux environment but I still
+got the recommended things.
+
+SSH into the beaglebone by using the address "192.168.7.2" and
+connect to the wifi by using the connmanctl terminal where you
+can get all of the information for the beaglebone and wifi such
+as the IP address (10.97.85.170) and stuff.
+
+sudo connmanctl
+connmanctl> enable wifi
+connmanctl> scan wifi
+connmanctl> services
+connmanctl> agent on
+connmanctl> connect wifi_506583d4fc5e_544e434150413937414239_managed_psk
+connmanctl> quit
+
+Update the beaglebone stuff by doing sudo apt-get update from the
+terminal that's on the beaglebone. Get all the ssh server and ssh client
+things installed on my computer to make everything work and stuff.
+
+Get all the openssh stuff that I need by using the command to see
+dpkg --get-selections | grep openssh to see that I don't actually have
+openssh-server installed so I go and install that to use it.
+
+Also have to do the rest of the stuff and install updates using
+sudo apt-get update, sudo apt-get install xauth, sudo apt-get install xvfb
+I already had firefox installed because I was on ubuntu so that was fine
+
+SERVER-SIDE
+First make a keypair by doing the ssh-keygen thing and just press enter
+to do everything in the default location. Then create another directory
+account for my partner by doing something like
+sudo useradd -d /home/ryang -m rng
+The username is rng and the directory he has is ryang
+Then also have some sort of password or something
+sudo passwd rng
+Create the .ssh directory for doing the
+cd /home/ryang
+sudo mkdir .ssh
+Give the person all their permissions and let them be the owner to make it work
+From within the directory you can do all of the stuff
+sudo shown -R username .ssh
+sudo chmod 700 .ssh
+Make sure that your passphrase is one that you chose and it's easiest to make it
+so that everything else that the client needs is the same so that you can get in
+and everything works. There were issues before when I ignored the passphrase and
+tried to add later on the client side.
+
+CLIENT-SIDE
+First also do a ssh-keygen same as the server side version of the lab
+Try to log into the directory made for me following the steps below
+ssh-copy-id -i seanyin@10.97.85.171
+root@beaglebone:~# ssh-keygen
+root@beaglebone:~# ssh-copy-id -i seanyin@10.97.85.171
+At this point I can then try to log into the directory on the other beaglebone
+that was made for me and given to me all the permissions that I wanted so I
+could more or less do anything I want there.
+Then i can use the command pwd to verify that i am indeed at /home/seanyin
+I created a file there too called HACKED using nano, and typed some stuff in
+I can also use the touch command to create anything I want, because it works!
+Then to actually save it, I needed to go through the process of keygen >
+logging on the account the first time > save the ssh-add > enter passphrase.
+Then after that every time I want to log in I should just be able to do
+ssh seanyin@10.97.85.171
+If the agent ever doesn't work, than you can start it by doing
+eval `ssh-agent -s`
+and then use ssh-add to get it so that you don't need to type the password
+
+Finally for the X11 forwarding part of the project you just need to log in
+in the same fashion and make sure that everything is fine.
+ssh -X seanyin@10.97.85.171
+Then you just need to test out that all the things work so you just see that
+xterm and firefox run with the display, and everything just generally works
+The main difference between ssh -X and ssh -Y is that ssh -Y should be protected
+while ssh -X is not protected, and when you look in the ssh_config file, it
+acts differently depending on whether ForwardX11Trusted is set to yes or no.
+-Y is trusted so they are able to do more things, and -x is not really able
+to do as much but in practice, we are able to configure things so that both
+modes are able to display our xterms.

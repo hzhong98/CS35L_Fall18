@@ -1,0 +1,123 @@
+Sean Yin
+304 936 424
+Lab 4
+Jeremy Rotman
+
+
+
+PART 1
+
+Get your file with the command
+wget ftp://ftp.gnu.org/gnu/coreutils/coreutils-8.29.tar.xz
+
+Decompress the tar file with the command
+tar -xvf file.coreutils-8.29.tar.xz
+
+Ran the command given to me by the project spec
+gpg --verify --keyring ./gnu-keyring.gpg coreutils-8.29.tar.xz.sig
+
+There were some errors in verification because I didn't have certain files
+or directories, so the signiture verification ended up failing
+
+
+
+PART 2
+
+Move into the coreutils-8.29 folder
+Read the install file and see what I have to do to install into
+a specific temp directory I want like was said in the spec
+./configure --prefix=/u/eng/ugrad/seany/35L_P03/install
+
+Keep following the instructions and just run the commands
+Compile the actual coreutils so everything can work
+make
+
+Install those files into the specific directory that you configured
+earlier, in --prefix=/u/eng/ugrad/seany/35L_P03/install
+make install
+
+
+
+PART 3
+
+Move into the install directory and into the bin directory
+Use the ls command that's in the bin directory
+./ls -a -A
+
+ .          date        id        nproc      sha224sum   timeout
+ ..         dd          install   numfmt     sha256sum   touch
+'['         df          join      od         sha384sum   tr
+ b2sum      dir         kill      paste      sha512sum   true
+ base32     dircolors   la        pathchk    shred       truncate
+ base64     dirname     link      pinky      shuf        tsort
+ basename   du          ln        pr         sleep       tty
+ cat        echo        logname   printenv   sort        uname
+ chcon      env         ls        printf     split       unexpand
+ chgrp      expand      md5sum    ptx        stat        uniq
+ chmod      expr        mkdir     pwd        stdbuf      unlink
+ chown      factor      mkfifo    readlink   stty        uptime
+ chroot     false       mknod     realpath   sum         users
+ cksum      fmt         mktemp    rm         sync        vdir
+ comm       fold        mv        rmdir      tac         wc
+ cp         groups      nice      runcon     tail        who
+ csplit     head        nl        seq        tee         whoami
+ cut        hostid      nohup     sha1sum    test        yes
+
+Notice that it does list the . and .. even though you don't want it to
+
+
+
+PART 4
+
+Move into the actual coreutils-8.29 folder which contains the source code
+wget "https://debbugs.gnu.org/cgi/bugreport.cgi?bug=30963;filename=0001
+-ls-A-now-overrides-a.patch;att=1;msg=10"
+
+Rename the resulting folder using mv into something easy like MY_PATCH
+Patch the ls function with the command
+patch -p1 < MY_PATCH
+
+The p1 is needed so you can avoid typing the first part of the path
+
+
+
+PART 5
+
+make
+
+Notice it doesn't work so you apply a fix by resetting
+autoreconf
+
+make again and it works this second time
+
+make was needed to rewrite the buggy code but installing wasn't needed
+because we don't need to put it in the install folder
+
+
+
+PART 6
+
+Run the ls command from the installed location, confirm that it doesn't work
+/install/bin/ls -a -A
+
+.                      done      lab3.txt~                    test
+..                     hw3.txt   .lo_hi_option_temp_file.txt
+coreutils-8.29         install   shuf
+coreutils-8.29.tar.xz  lab3.txt  shuf.py
+
+Run the ls command from the src location to confirm that it does work
+/coreutils-8.29/src/ls -a -A
+
+coreutils-8.29         hw3.txt   lab3.txt~                    shuf.py
+coreutils-8.29.tar.xz  install   .lo_hi_option_temp_file.txt  test
+done                   lab3.txt  shuf
+
+Find the test case that came with the patch
+/coreutils-8.29/tests/ls/a-option.sh
+
+Make it executeable with chmod 777
+
+Go back to the source directory for coreutils and run it
+./coreutils-8.29/tests/ls/a-option.sh
+
+make check TESTS=tests/ls/a-option.sh SUBDIR=.

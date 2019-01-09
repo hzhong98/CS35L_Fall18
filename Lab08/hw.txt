@@ -1,0 +1,32 @@
+1.  If the stalkers are only looking at bytes going across the network,
+the information should still be secure because it's only the encrypted
+stuff going across the network in the first place.  Once the information
+has been encrypted by the public key which happens before it is sent,
+you need the private key to be able to see what it says and since the
+private key should be very secure, some random people looking at your
+data won't have access to it and your information should be secure.
+
+     If the stalkers had somehow managed to tap my keystrokes, it could
+become a more dangerous situation because even though they might not have
+access to the private key, they could manage to figure out the passphrase
+which still gives them the potential to mess things up on my side pretty
+bad, more or less ruining the security we've had up to this point.
+
+     If the stalkers had access to a USB with everything loaded on it,
+then they would be able to do anything they wanted because they could
+pretty easily find both public and private keys if they knew what they
+were doing. Then they could just decrypt everything I've sent as they
+please once they've figured out the private key and the encryption
+would be completely meaningless for hiding information from these hackers.
+
+2.    gpg2 --verify checks if the target file and detatched signitures
+match eachother. It won't actually know that you've have or haven't created
+the files yourself. If a hacker gets the message and has the tools to
+decrypt, encrypt, and have their own public keys, then they can just send
+that and the verification would never know any better.
+
+     Get around the issue by allowing a trusted thrid party with your
+public key so that they will be able to track where these messages are
+coming from and stop any issues that seem to be from fakes or hackers.
+The third party would be the real verification to see if something sent
+is legitamate or not.

@@ -1,0 +1,77 @@
+First run the sort command and get
+-sort (GNU coreutils) 8.22
+Which is recent enough because 22 > 6 even though 8.22 < 8.6
+
+Then we need to generate 16777216 random floats
+Use od and -tfF to generate floating points
+Since each float is 4 bytes, we allocated 67108864 bytes
+Use N to limit dump size and An to remove address
+Then put all of those floats into a file
+
+od -An -tfF -N 16777216 < /dev/urandom > flts.txt
+
+Now you want to replace all the whitespace and suppress them
+One newline per float is all you want
+So just translate all the other whitespace to newline
+
+cat flts.txt | tr -s ' ' '\n'
+
+Which doesn't actually work so we switch up the ordering
+
+od -An -tfF -N 16777216 < /dev/urandom | tr -s ' ' '\n' > flts.txt
+
+The error is that there is actually a single whitespace at the very
+beggining, a new line which shouldn't be there.  Remove it with 
+sed '/^$/d'
+
+od -An -tfF -N 16777216 < /dev/urandom | tr -s ' ' '\n' | sed '/^$/d' > flts.txt
+
+Also turns out we were supposed to use the actual 2^24 and not the
+integer equivilent. The FINAL command is as shown below.
+
+od -An -tfF -N $((4*(2**24))) < /dev/urandom | tr -s ' ' '\n' | sed '/^$/d' > flts.txt
+
+This didn't really work as in there is still a raondom newline at the beginning
+and end but since we have new lines anyways I guess this level of error is 
+acceptable, so I will just say we got the results exactly how we wanted,
+a file of floats each seperated by a single newline. You can verify the number of
+floats is correct by going to the last line of the file and subtracting 2 for the
+first and last newlines and you get exactly 2^24 or 16777216 lines!
+
+
+Next run time to see how fast parallelism is
+We don't need the actual sorted results so we can send it to /dev/null
+
+time -p sort -g flts.txt > /dev/null
+real 8.75
+user 46.85
+sys 0.33
+
+time -p sort -g --parallel=1 flts.txt > /dev/null
+real 42.03
+user 41.92
+sys 0.10
+
+time -p sort -g --parallel=2 flts.txt > /dev/null
+real 22.28
+user 42.19
+sys 0.12
+
+time -p sort -g --parallel=4 flts.txt > /dev/null
+real 13.06
+user 43.54
+sys 0.16
+
+time -p sort -g --parallel=8 flts.txt > /dev/null
+real 9.33
+user 48.55
+sys 0.30
+
+Real time is still quickest just going with plain sort, and it starts off high
+with a parallelism of 1, decreasing as parallelism goes up approaching the time
+of plain sort. User time is decreased for parallelism initally but increases
+as amount of threads increases, eventually even passing the plain sort. Sys time
+gets a lot lower for parallelism, but gets higher as you try to use more threads,
+eventally approaching the level of plain sort. From this we can assume that plain
+sort is already optimized to use parallelism all on its own, probably 8 threads.
+

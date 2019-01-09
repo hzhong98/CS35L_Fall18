@@ -1,0 +1,73 @@
+PART 1:
+Create this log so we can turn it in at the end.
+Use it to record all the steps we take in the homework.
+
+PART 2:
+cd into our diffutils folder and use checkout
+git checkout v3.0 -b quote
+This allows us to get the version 3.0 of diffutils into
+a new branch called quote
+You can also use git branch -a to see all the branches after,
+there should be a star next to quote (The branch you're in)
+
+PART 3:
+You can patch everything up with the patch command after
+that and make sure it's running correctly.
+It isn't really going through that many changes as you can
+see, and the output looks something like
+patching file src/dir.c
+patching file src/sdiff.c
+patching file src/util.c
+patching file src/cmp.c
+patching file src/diff.c
+patching file src/diff3.c
+My screen popped up some prompts but I just had to make
+sure the status of git was alright and it ended up without
+any major issues.
+
+PART 4:
+Notice that C-x 4 a is a command that will allow us to create
+a change log out of the other files that we have (the c files
+from part 3 above)
+
+PART 5:
+Add entries to the change log with C-x 4 a by running it on 
+each of the 6 entries above. This will allow us to note the types
+of changes that we made to each of the files.
+
+PART 6:
+We can then commit the changes using our ChangeLog as the
+description using the commands git add . and
+git commit -F ChangeLog
+This will gives us a description of the files that had been
+committed and also the amount of additions and removals in
+all for what you had just commit.
+
+PART 7:
+Like the instructions say, you need to create a format patch
+which you can do with the following command.
+git format-patch -1 --stdout > formatted-patch.txt
+This format patch has all the changes in it that you had.
+
+PART 8:
+For the partner part, after swapping formatted-patch files,
+I created a branch in order to test everything properly. In this
+branch I used git am to apply the patch and built it with
+the same steps as before. git am formatted-patch.txt to ./bootstrap
+to ./configure, make, and make check.
+Everything was done as expected and there was nothing of particular
+to note here.
+
+PART 9:
+Using make distdir, you can make sure the ChangeLog was correct.
+You just need to look at the new directory created and find
+the output of my partner's ChangeLog was present. Emacs into the
+ChangeLog and verify that everything seems to be correct.
+
+PART 10:
+First I logged into Ubuntu on my computer so that xterm would
+work properly and then I simply ssh into the linux server and 
+cd ~eggert/src/gnu/emacs
+gitk
+After that just go to the part with a bunch of entries from Jan 25,
+2015 and look for a merge that was the most recent.

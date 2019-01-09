@@ -1,0 +1,160 @@
+
+UCLA Computer Science 35L (Winter 2007) final exam
+100 minutes total, open book, open notes
+
+Name:________________________________    Student ID:_______________
+
+----+----+----+----+----+----+----+----+----+----+----+----+----+-----
+1   |2   |3   |4   |5   |6   |7   |8   |9   |10  |11  |12  |13  |total
+    |    |    |    |    |    |    |    |    |    |    |    |    |
+    |    |    |    |    |    |    |    |    |    |    |    |    |
+----+----+----+----+----+----+----+----+----+----+----+----+----+-----
+
+Section I (5 minutes each)
+
+1. What is the difference between "Open Source" and "Closed Source"
+   software?  What are some advantages of "Open Source" software?
+   Name at least one advantage from the security perspective.
+
+2. What are the three different classes managed by file permissions
+   that are symbolically represented by strings like "-rwxr-xr-x"?
+   What are the specific permissions managed by file permissions?
+   What command do you use to change permissions on a file?
+
+3. How would you find the man pages for:
+   a. the program "printf"
+   b. the library call "printf"
+   c. the system call "read"
+
+4. How does the 'pipe' operator work?
+   For example in Assignment 2, we ran the following set of commands:
+
+	tr -cs 'A-Za-z' '[\n*]' | sort -u | comm -23 -words
+
+5. What would be some advantages and disadvantages of writing a
+   program in C++ compared to a shell script (similar to the fmv.sh
+   script in Assignment 2)?  Consider factors such as potential
+   functionality, ease of maintenance, portability, and performance.
+
+6. Suppose you are working with another student on a class project.
+   How are 'patches' useful in this case?
+   What command is used to generate a patch and to apply a patch?
+   Why could a patch be rejected when you try to apply it?
+
+
+
+Section II (10 minutes each)
+
+7. What are regular expressions?  Describe what each of the following
+   regular expressions can be used for.  Give two examples for each.
+   Also point out why they are not a complete solution and describe
+   how you would make it complete.
+
+   a.  [A-Za-z]*@[A-Za-z]*[.]com
+   b.  www[.][A-za-z]*[.]com
+   c.  [0-9]*[.][0-9]*
+
+8. Suppose you are working in a team of five programmers at a company.
+   You have imported version 1.0 of a program into the vendor branch
+   of your CVS repository and are going to change/improve it.
+   You want to use CVS to maintain a central repository and
+   synchronize between the team members.
+
+    A. Describe at a high-level the initial steps that are involved in
+       creating a CVS repository.
+
+    B. What programming practices would you recommend to your
+       teammates to ensure:
+
+       I.  The programmers stay current with all the changes that are
+	   checked into the repository.
+
+       II. The central repository is always in a state where the
+	   program can be checked-out of the repository and compiled
+	   and run successfully.
+
+    C. After 8 months, a new version 1.1 of the program comes out.
+       How would determine all the changes that you have made?
+       How would you apply those changes to the new version?
+       What sort of problems are you likely to see?
+       How would you resolve them?
+
+9. Consider the following C program.  "gets" is a C library function
+   that reads the next input line into the argument buffer.
+
+   #include <stdio.h>
+   #include <stdlib.h>
+
+   int x = 100;
+   char buf[80];
+   int y = 200;
+
+   int
+   main (void)
+   {
+     gets (buf);
+     printf ("%d %d %d\n", atoi (buf), x, y);
+     return 0;
+   }
+
+   A. Where do you see the potential for buffer overflow?  Why?
+
+   B. Assume that you can change the source code for the
+      program. Describe what you can do to try and make sure the
+      program does not have buffer overflows.
+
+   C. What could you do if you cannot change the source code for the
+      program?  You can only try to detect and avoid the buffer
+      overflows from being exploited.  Hint: One common tactic is to
+      exploit the buffer overflow to insert arbitrary code into the
+      program stack.
+
+
+10. Answer the following questions about system calls.
+
+    A. What are system calls?
+
+    B. If the Linux kernel provides system calls such as "read" and
+       "write", why do most programs use library calls like "scanf",
+       "getchar", "printf" etc?
+
+    C. How do you measure the time a program executes in 'kernel
+       space'? in 'user space'?
+
+    D. Why is the total time that it takes for a program to execute
+       sometimes different than just the sum of the 'user space' and
+       'kernel space' times?
+
+
+11. At the start of each lab you went through various steps to set up
+    your networking.  Outline each step.  Describe what each step
+    achieves and what you are able to do after each step.
+
+
+12. Assume you are a hacker who has been able to plug your computer
+    into a Ethernet LAN at a company.  Your machine can now see all
+    the local traffic on the LAN.  What are some bad things you can do
+    as regards to
+
+    A. Communication between machines on the same network.
+
+    B. Communication between a machine on the same network and a
+       machine outside the LAN.
+
+    C. DNS
+
+
+13. You are the administrator for the Computer Science Department.  As
+    administrator you are responsible for setting up accounts for new
+    students and enabling them so that students can remotely log in
+    into machines on the network.
+
+    A. What would you recommend to the students? Telnet or ssh? Why?
+
+    B. In assignment 9, you saw that initially when the account is
+       created, the password for that account has to be communicated
+       to the student. What steps would you take to make sure that the
+       password is safely communicated to the students?
+
+    C. What would you recommend that the students do the first time
+       they lo-gin using that password?

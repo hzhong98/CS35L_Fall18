@@ -1,0 +1,12 @@
+#!/bin/bash
+LC_ALL=C
+
+for file in "$(ls /usr/bin | awk 'NR%101==304936424%101')";
+do
+    loc=`which $file`
+    ldd $loc
+done |
+grep so |
+sed '/^\/usr\/bin/d' |
+sort -u > slist.txt
+

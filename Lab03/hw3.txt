@@ -1,0 +1,13 @@
+1.	The patch should theoretically improve performance because it removes
+an if statement which marginally slows down the process in the pre-patched
+version
+
+2.	You just need to watch out for any other scripts that rely on the
+functionality of 'ls' as they could technically go wrong if they made
+use of the way the ls function worked before
+
+3.	You get an index error because the function relies on the number
+of lines in the file which is 0 for an empty file
+
+4.	There's a syntax error when you run the function with python3 rather
+than python because the IOError works differently for python2 and python3

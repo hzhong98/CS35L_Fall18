@@ -1,0 +1,78 @@
+#!/bin/bash
+
+#just to keep organization consistant
+export LC_ALL='C'
+
+#put the input directory into a variable called dir
+dir=$1
+
+#create a list to hold all our legitimate files
+declare -a list
+
+#create a counting variable for the array
+let n=0
+#list everything starting with period from dir and sort it into h_files
+h_files=`ls -a $dir | grep '^\.' | sort`
+
+#loop through all files starting with a period
+for file in $h_files
+do
+	#if they are symbolic links or directories, ignore
+    if [ -L "$dir/$file" ] || [ -d "dir/$file" ]
+    then
+		#echo "ignored $file"
+		continue
+	#if they are not able to be read, print the error out
+    elif [ ! -r "$dir/$file" ]
+    then
+		echo "$file unreadable"
+	#if they are files, then add them to the list of files
+    elif [ -f "$dir/$file" ]
+    then
+		list[$n]="$dir/$file"
+		let n=$n+1
+		#echo "Added $file"
+    fi #if they are not files, then just don't do anything
+done
+
+#list everything without a period from dir and sort it into a variable
+#called files
+files=`ls $dir | sort`
+
+for file2 in $files
+do
+	#if they are symbolic links or directories, ignore
+    if [ -L "$dir/$file2" ] || [ -d "dir/$file2" ]
+    then
+		#echo "ignored $file2"
+		continue
+	#if they are not able to be read, print the error out
+    elif [ ! -r "$dir/$file2" ]
+    then
+		echo "$file2 unreadable"
+	#if they are files, then add them to the list of files
+    elif [ -f "$dir/$file2" ]
+    then
+		list[$n]="$dir/$file2"
+		let n=$n+1
+		#echo "Added $file2"
+    fi #if they are not files, then just don't do anything
+done
+
+#loop through each of the files that you entered in your array before
+for ((i=0; i<$n; i++))
+do
+	#compare it with each of the files that comes after it
+    for ((j=i+1; j<$n; j++))
+    do
+		#use the compare command which returns 0 if they are the same
+		cmp -s "${list[$i]}" "${list[$j]}"
+		if [ $? -eq 0 ] #evaluate the result to see if the files were the same
+		then
+			#echo "MAKING LINK ${list[$j]} to ${list[$i]}"
+			#make the second one into a link of the first
+			#one if they are the same
+			ln -f "${list[$i]}" "${list[$j]}"
+		fi
+    done
+done

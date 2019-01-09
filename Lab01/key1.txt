@@ -1,0 +1,113 @@
+Name: Sean Yin
+ID: 304 936 424
+TA: Jeremy Rotman
+
+1.1
+C-x C-f e x e r 1 . h t m l Enter
+C-s H T M L
+C-s s c a v e n g e r M-b
+C-s s e l f - r e f e r e n t i a l M-b
+C-s a r r o w M-b
+C-e
+C-a
+// I did it in the most efficient way I knew how
+// NO arrow keys needed
+C-x C-c
+
+1.2
+M-g g 1 8 Enter C-k
+C-s D E L E T E - M E C-a C-k
+C-s e n . w i k i p e d i a C-s C-a C-k C-p C-k C-n C-n C-k
+C-s ! C-b C-b M-z >
+C-s ! C-a C-@ C-s - - > Enter C-w
+C-s ! C-a C-k
+
+1.3
+M-% A s s i g n m e n t SP 1 Enter A s s i g n m e n t SP 4 2 Enter y y
+Enter C-r U T F - 8 M-% U S - A S C I I Enter y
+C-M-r [ ^ [ : a s c i i : ] ] C-a C-k
+C-s < / o l > Enter Enter
+
+1.4
+// C-x 3 C-x o C-x C-f e x e r 1 . h t m l Enter
+// c a t SP e x e r 2 . h t m l SP e x e r 2 . d i f f SP > e x e r 4 . h t m l
+M-> C-r < C-@ C-e M-w M-g g 4 0 2 Enter C-y
+C-s n o t h i n g C-@ C-e C-b C-b C-b C-b C-b M-w M-g g 3 8 6 Enter C-e C-b C-b C-b C-b C-b C-y
+C-s < p > O r M-a C-f C-@ M-e C-n C-n M-w M-g g 3 8 7 Enter C-y
+C-s Y o u C-a C-f C-@ M-e C-n M-w M-g g 3 4 0 Enter C-y
+C-s D E L E T E - M E C-a C-f C-@ C-e M-w M-g g 1 2 7 Enter C-y
+C-r d i f f C-a C-f C-@ C-e M-w M-g g 1 8 Enter C-y
+C-s - - - SP e x e r 1 . h t m l C-a C-@ M-> C-w 
+C-x u
+C-r e x e r 1 . h t m l C-e M-% - - Enter - SP - Enter y y y y y y y y y y y y y C-r - - C-f M-> - - > C-r - - - C-a < !
+M-< M-% < o l > Enter < o L > Enter ! 
+// 7 instances
+// d i f f SP - u SP e x e r 1 . h t m l SP e x e r 4 . h t m l SP > e x e r 4 . d i f f
+
+
+// BKSP is Back Space
+1.5
+M-x m a k e - d i r e c t o r y Enter j u n k Enter
+C-x C-f j u n k / h e l l o . c Enter
+M-x c o m p i l e Enter BKSP BKSP BKSP BKSP BKSP BKSP BKSP BKSP g c c SP - o SP e x e c SP h e l l o . c Enter
+C-x b h e l l o - o u t Enter C-u M-! . / e x e c Enter
+
+#include <stdio.h>
+int
+main (void)
+{
+  char n = '\n', b = '\\', q = '"';
+  char const *p = "#include <stdio.h>%cint%cmain (void)%c{%c  char n = '%cn', b = '%c%c', q = '%c';%c  char const *p\
+ = %c%s%c;%c  printf (p, n, n, n, n, b, b, b, q, n, q, p, q, n, n, n, n);%c  return 0;%c}%c";
+  printf (p, n, n, n, n, b, b, b, q, n, q, p, q, n, n, n, n);
+  return 0;
+}
+
+C-@ M-> M-w C-x C-f k e y 1 . t x t Enter C-y
+
+1.6
+C-x b Enter
+( r a n d o m SP " 3 0 4 - 9 3 6 - 4 2 4 " ) C-j M-b C-b C-@ C-e M-w C-x C-f k e y 1 . t x t C-y 
+-917514545371725823
+( s e t q SP x SP ( r a n d o m ) ) C-j ( s e t q SP y SP ( r a n d o m ) ) C-j
+( * SP x SP y ) C-j
+// Somehow, a huge positive number times a huge positive number became a negative number
+M - : ( * SP x SP y ) Enter 
+// This time the results have more information including hex and oct values
+C-h f r a n d o m Enter C-x b * H e l p * Enter
+// The numbers are pseudo-random because a program has to come up with them
+// The probability that the answer is incorrect is effectively 100%.  When they generate a number from TMIN to TMAX,
+and multipy it by another number from TMIN to TMAX, it's almost certain to overflow.  In a math way, if you take the
+first number as one, then the probability that the answer doesn't overflow is 100%, but if you take the first number
+as two, half of both negative and positive numbers overflow.  This becomes 2/3 and 3/4 etc. etc. until the higher 
+numbers leave it virtually impossible to not overflow.  Statistically, the answers should be a bell curve hovering
+around the end of the binary spread of digits.  In order to get a number that fits, you have to get all 0 or 1 in
+every bit for the second half of the answer (the overflow area) which is almost impossible considering that it accounts
+for so many of the possibilities.
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

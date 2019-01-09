@@ -1,0 +1,29 @@
+TOP LEFT:
+This shows all the branches and there merges
+and the history of everything that happened to these
+including information about what each specific row was
+trying to do. It has all of the commits and relationships
+like the head pointer and commit messages.
+
+TOP MIDDLE:
+This shows the person who made each of the commits
+and also tells you what their email address was.
+
+TOP RIGHT:
+This shows the date of the commit and the time of the commit,
+which was useful in finding the most recent merge up to
+Jan 25, 2015 like we had to do in the hw assignment.
+
+TRUE MIDDLE:
+Has buttons to move up or down commits and also allows
+the person to search for specific things as well as tells
+you which row you are currently looking at.
+
+BOTTOM LEFT:
+Gives more information about the commit that you selected
+from the top left box. There's infromation such as author,
+parent, children, branches, messages, etc.
+
+BOTTOM RIGHT:
+This is just a comments window showing the possible files
+impacted by your commit.

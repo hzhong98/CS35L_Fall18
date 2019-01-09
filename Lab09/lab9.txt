@@ -1,0 +1,131 @@
+PART 1:
+Copy the diffutils repository with the git method
+This command creates a new directory in your current directory named diffutils
+git clone ~eggert/src/gnu/diffutils
+
+PART 2:
+First move into the diffutils folder you created
+Get a log of all the changes using the git log command
+git log > git-log.txt
+
+PART 3:
+Get a list of all the tags in the diffutils folder too
+git tag > git-tag.txt
+
+PART 4:
+Go into the git-log.txt to look at all the commits, use emacs to find the quote
+emacs git-log.txt -> C-s "maint: q" -> copy the commit number
+Run git format-patch to create a patch file called quote-patch.txt after exiting emacs
+git format-patch -1 62ca21c8c1a5aa3488589dcb191a4ef04ae9ed4f --stdout > quote-patch.txt
+
+PART 5:
+Check out version 3.0 of diffutils
+git checkout v3.0
+
+PART 6:
+Apply the patch created early to the version 3.0 of diffutils by using the patch
+command, and skip through all undetermined files by using the RETURN key.
+patch -p1 < quote-patch.txt
+
+PART 7:
+Check out everything is happening by using the command
+git stataus
+# HEAD detached at v3.0
+# Changes not staged for commit:
+#   (use "git add <file>..." to update what will be committed)
+#   (use "git checkout -- <file>..." to discard changes in working directory)
+#
+#       modified:   NEWS
+#       modified:   README
+#       modified:   TODO
+#       modified:   doc/diagmeet.note
+#       modified:   ms/config.bat
+#       modified:   ms/config.site
+#       modified:   po/en.po
+#       modified:   src/analyze.c
+#       modified:   src/cmp.c
+#       modified:   src/context.c
+#       modified:   src/diff.c
+#       modified:   src/diff.h
+#       modified:   src/diff3.c
+#       modified:   src/dir.c
+#       modified:   src/ifdef.c
+#       modified:   src/io.c
+#       modified:   src/sdiff.c
+#       modified:   src/side.c
+#       modified:   src/system.h
+#       modified:   src/util.c
+#       modified:   tests/help-version
+
+PART 8:
+Go into the files that you want to check out and learn how to use this vc-diff buff
+C-x v = allows you to get in and see what was changed with the last version (patch)
+
+PART 9:
+Revert the changes on all the non-c files including NEWS, README, TODO, doc/diagmeet.note,
+ms/config.bat, ms/config.site, po/en.po, src/diff.h, src/system.h, tests/help-version by
+emacs into the file and use the command to undo
+C-x v u -> yes -> C-x C-c
+If you run git status again then you can tell that all the non-c files were reverted to
+the previous state so they don't show up under the modified section anymore.
+Then you go into the c files that you want to get rid of all of the modifications to
+commas that weren't string constants, so you go to those specific parts and undo them.
+src/analyze.c, src/cmp.c, src/context.c, src/diff.c, src/diff3.c, src/dir.c, src/ifdef.c,
+src/io.c, src/sdiff.c, src/side.c, src/util.c
+emacs in -> C-u C-c C-a all comment hunks -> C-x C-c -> y
+
+PART 10:
+Now you need to find all files that are of the type src/*.c.rej and realize that they
+need to be manually fixed like the patch did for everything else. Basically, we are
+required to go in and change all ` to ' whenever one shows up that's not in a comment.
+First we can find the files we need to work on by using find . -name "*.c.rej"
+./src/diff.c.rej
+./src/diff3.c.rej
+Open up the corresponding files ./src/diff.c and ./src/diff3.c and search for backticks
+C-s ` -> replace with ' -> C-x
+
+PART 11:
+Remove untracked files that git status warns about
+git clean -f
+
+PART 12:
+Run git status again and see what it gives us. We should get 6 modified files and a
+final diff of around 300-400 lines. Then just use git diff to put everything into a
+file that we name quote-3.0-patch.txt. You can even use wc after to check the line count.
+The line count ends up being 326 which is pretty much what we expect.
+modified:   src/cmp.c
+modified:   src/diff.c
+modified:   src/diff3.c
+modified:   src/dir.c
+modified:   src/sdiff.c
+modified:   src/util.c
+git diff > quote-3.0-patch.txt
+wc -l quote-3.0-patch.txt
+
+PART 13:
+Follow the instructions from README-hacking which are fairly simple.
+Get a bunch of errors over and over again until I realize I can just run it on linux
+server 2 and not deal with any of those erros so it pretty much just works perfectly.
+./bootstrap
+./configure
+make
+make check
+Then you run diff . - and diff --help to make sure everything works
+
+PART 14:
+For the sanity check you want to compare the versions of diffutils so you can first
+make a copy of the src folder called diffutils-3.0-patch and then get the original
+again and put it into a folder called diffutils-3.0, and then we can run our diff
+on the seperate source codes.
+cp -r src ../diffutils-3.0-patch
+git clone ~eggert/src/gnu/diffutils ../diffutils2
+cp -r ../diffutils2/src ../diffutils-3.0
+cd ..
+diffutils/src/diff -pru diffutils-3.0 diffutils-3.0-patch > quote-3.0-test.txt
+
+PART 15:
+Move quote-3.0-patch.txt out of the original diffutils folder
+diff -u quote-3.0-test.txt quote-3.0-patch.txt > comp.diff
+When you get into the diff file and check it out, there are actually a lot of
+differences but most of them are harmless and deal with backticks or different
+file paths so we can conclude that everything worked out pretty well.

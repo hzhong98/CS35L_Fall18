@@ -1,0 +1,135 @@
+Name: Sean Yin
+ID: 304 936 424
+TA: Jeremy Rotman
+
+1. What shell command uses the man program to print all the commands that have a specific word in their man page
+(or at least the description part of the man page)? (hint: man man)
+
+The shell command 'man -k' allows you to search the manual for any key words that follow the -k.
+This can be found by using the hint 'man man' to find out what the '-k' command does.
+
+
+
+2. Where are the mv and sh programs located in the file system? List any shell commands you used to answer this question.
+
+Using the 'which' command, you can find the full path to shell commands, which can be verified using 'man -k which'.
+The path to mv is '/usr/local/cs/bin/mv' and the path to sh is '/usr/bin/sh'.
+
+
+
+3. What executable programs have names that are exactly two characters long and end in r, and what do they do?
+List any shell commands you used to answer this question.
+
+The two executable programs are 'pr' which converts text files for printing, and 'tr' which translates or deletes characters.
+Using the find command, you can look for files in the '/usr/local/cs/bin' directory.  Then there are specifiers
+which allow you to narrow down the search such as the '-type' predicate and searching for a specific '-name'.
+The best shell command to use would be 'find /usr/local/cs/bin -name '?r' -executable'.  To find out the uses of
+the executables, you just need to look them up in the manual. Simply use 'man pr' and 'man tr'.
+
+
+
+4. When you execute the command named by the symbolic link /usr/bin/emacs, which file actually is executed?
+List any shell commands you used to answer this question.
+
+The actual file is '/etc/alternatives/emacs'. First find out how to navigate around a symbolic link with 
+'man -k symbolic link' and find out that readlink will print the canonical file name. Then do 'readlink /usr/bin/emacs'.
+
+
+
+5. What is the version number of the /usr/bin/gcc program? of the plain gcc program? Why are they different programs?
+
+The version in /usr/bin/gcc is gcc (GCC) 8.2.0, which you can find out by changing into the directory and looking for
+the 'gcc --version'.
+Then if you stay in the home directory and use the command 'usr/bin/gcc -v', you can see that it is using the built-in
+spec which is gcc 4.8.5
+
+
+// NOT SURE HOW TO DO THE FIRST ONE
+6. The chmod program changes permissions on a file. What does the symbolic mode u+sx,o-w mean, in terms of permissions?
+
+For 'u+sx', the user gets executable permissions and sets user group/ID upon execute.
+With 'o-w', you subtract the write permissions from the other group, so they won't be able to write to the file.
+This can be found by looking up chmod on the manual.
+
+
+
+7. Use the find command to find all directories modified in the last four weeks that are located under (or are the same as)
+the directory /usr/local/cs. List any shell commands you used to answer this question.
+
+The shell command to find directories modified is 'find /usr/local/cs -type d -mtime -28'.
+I used 'man find' in order to find out how the find function worked and then found '-daystart' and looked at
+each of the commands after that.  I found '-mtime n', which means the file was last modified n days ago.  
+Find looks into a specified directory where the search can be modifed to look for a specific type of file
+which was last modified a certain amount of days ago.
+
+
+// HOW DO YOU DO THE COUNTING PART
+8. Of the files in the same directory as find, how many of them are symbolic links?
+List any shell commands you used to answer this question.
+
+There are 279 symbolic links in the same directory as find. To look this up, first use the which command to
+find out where 'find' is located, and then use find on that location.  To specify for symbolic links, you can
+just use '-type l'.
+
+
+// HOW DO CHECK IF IT IS A REGULAR FILE
+9. What is the oldest regular file in the /usr/lib64 directory? Use the last-modified time to determine age.
+Specify the name of the file without the /usr/lib64/ prefix. Consider files whose names start with ".".
+List any shell commands you used to answer this question.
+
+The oldest file in '/usr/lib64' is 'librom1394.so.0.3.0'.
+First you can change directory to /usr/lib 64, then list the contents by using ls.  To have it list in
+cronological order, you can just list 'ls -lt' and the file will show up last.
+
+
+// PROB WRONG
+10. Where does the locale command get its data from? List any shell commands you used to answer this question.
+
+Using the manual, you can see that locale gets information from the environment.  This is found through 'man locale'
+and just using locale.
+
+
+
+11. In Emacs, what commands have downcase in their name? List any Emacs commands you used to answer this question.
+
+downcase-dwim
+downcase-region
+downcase-word
+You can find this by doing Control + h at the same time to get help, and then typing a for apropos to search for
+the key word 'downcase'.
+
+
+
+12. Briefly, what do the Emacs keystrokes C-M-r through C-M-v do? Can you list their actions concisely?
+List any Emacs commands you used to answer this question.
+
+'C-M-r' allows a person to search for a given string in a backwards search.
+'C-M-v' scrolls through another window that's open but the cursor is not currently on.
+To test this, I opened up other windows like the manual with 'C-h' and tested what the commands did.
+You're also able to test this by checking key bindings 'C-h b' and find the names of the specific commands.
+
+
+
+13. In more detail, what does the Emacs keystroke C-g do? List any Emacs commands you used to answer this question.
+
+'C-g' is used to back out of a certain sequence, as a direct quit.  When I tested it, 
+I could use it to go from 'C-h a' to get out of finding something.  It would clear the commands I tried before 
+and take me back to a clean slate.  To find out more information, go to key bindings and switch windows and
+press enter on the link.  'C-h b C-x o' scroll down and enter on the blue link for 'C-g'.
+
+
+14. What does the Emacs yank function do, and how can you easily invoke it using keystrokes?
+List any Emacs commands you used to answer this question.
+
+The yank function is just the clipboard and paste function.  You can use it by doing 'C-y' found by 'C-h f yank'.
+You can also use 'C-v' once you activate the command 'M-x cua-mode'.
+I found this through the manual under killing and CUA Bindings.
+
+
+
+15. When looking at the directory /usr/bin, what's the difference between the output of the ls -l command,
+and the directory listing of the Emacs dired command? List any shell or Emacs commands you used to answer this question.
+
+Dired tells you the current and parent directory, ls doesn't.
+To list out the directory without emacs, just change into the directory and us 'ls -l'.
+To list out the directory in emacs, use the command 'C-x d' and then change the directory to /usr/bin and press enter.

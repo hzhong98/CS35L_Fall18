@@ -1,0 +1,121 @@
+Sean Yin 304 936 424
+Lab 4 Jeremy Rotman
+
+Change locale from 'en_US.UTF-8' to 'C' using export LC_ALL='C'
+
+Sort the file you're told to '/usr/share/dict/words' and export the result
+into a file in the project directory using sort /usr/share/dict/words > words
+
+Get the assignment webpage html using wget
+https://web.cs.ucla.edu/classes/fall18/cs35L/assign/assign2.html 
+which will create a new assign2.html file which needs to be turned to a
+plain txt file using the command mv assign2.html assign2.txt
+
+Also get the webpage that has all the hawaiian words that you want to make a
+dictionary out of using wget http://mauimapp.com/moolelo/hwnwdseng.htm
+and rename that file into something more manageable by doing mv hwnwdseng.htm
+hwords.html
+
+Use the translate command to turn all complements (-c) of letters A-Z or a-z 
+into newline characters, run
+tr -c 'A-Za-z' '[\n*]'
+
+Use the translate command to do the same thing as above but additionally
+squeeze out extra newline characters, so there is only one newline between
+each of the words
+tr -cs 'A-Za-z' '[\n*]'
+
+Do the same thing as above again except piping the result into a sort command
+in order to have the resulting words displayed in ASCII order
+tr -cs 'A-Za-z' '[\n*]' | sort
+
+Repeat the above command but get rid of any repeat words using sorts -u
+command which will keep unique words in the output
+tr -cs 'A-Za-z' '[\n*]' | sort -u
+
+Compare the output to the words file from earlier which contains the ASCII
+sorted dictionary and then outputs 3 columns, words unique to the sorted
+output, words unique to the words file, and words that are common to both
+tr -cs 'A-Za-z' '[\n*]' | sort -u | comm - words
+
+Do the same comparison as before, but remove the second and third lines,
+leaving only the words which are unique to the downloaded html file which
+was put through the sorting process from the last 5 steps,
+tr -cs 'A-Za-z' '[\n*]' | sort -u | comm -23 - words
+
+Start off with the Shebang and make sure you're using bash first of all
+#!/bin/bash
+
+Find using the extended regex and grep, all the patterns that match the
+pattern starting and ending with the html tags with at least one matching
+character in the middle
+grep -E '<td>.+<\/td>' |
+
+Without printing out duplicates, do not print out every other line,
+starting from the first line
+sed -n '1~2!p' |
+
+Translate all uppercase letters into lowercase letters
+tr [:upper:] [:lower:] |
+
+Replace all instances of the backtick with the aposterphe to make it
+consistant accross all words and easy for us to use
+tr '\`' "\'" |
+
+Since we now only have tags surrounding the words that we want, we can start
+getting rid of the openning tags
+sed 's/<td>//g' |
+
+as well as the ending tags
+sed 's/<\/td>//g' |
+
+Get rid of the opening tags that surround the special a characters using
+sed 's/<u>//g' |
+
+Also get rid of the end tags
+sed 's/<\/u>//g' |
+
+Replace all spaces and commas with new lines
+tr ' ,' '\n' |
+
+Find any line using sed and find any line that contains a character that isn't
+listed in the brackets and delete that line which has an unwanted character
+sed "/[^pk\'mnwlhaeiou]/d" |
+
+Get rid of that one extranious newline at the beginning and possibly more
+if that were to be the case
+sed '.^$/d' |
+
+Sort the results and get rid of any duplicate words or characters or newlines
+sort -u
+
+Create an actual hawaiian dictionary using the script by running
+./buildwords < hwords.html > hwords
+
+You can uncapitalize all the hawaiian letters and modify the previous command
+to output all non-hawaiian words against the hawaiian dictionary by doing
+tr [:upper:] [:lower:] < assign2.txt | tr -cs "pk\'mnwlhaeiou"
+ '[\n*]' | sort -u | comm -23 - hwords > MisHawaii
+
+Then put the result in a file called MisHawaii and use a command to find the
+amount of incorrectly spelled words in the file you are looking at, in this
+case assign2.txt (the html file of the given website) has 198 misspelled
+Hawaiian words wc -l MisHawaii
+
+You can output all non-english words against the english dictionary and put
+it into a MisEnglish file by doing
+tr -cs 'A-Za-z' '[\n*]' < assign2.txt | sort -u | comm -23 - words > 
+ MisEnglish
+And find out how many results, there are 81, are in the MisEnglish file
+by using the command wc -l MisEnglish
+
+Then we can compare the words that are mispelled in Hawaiian but not in
+English into a new file called EngNHwii by doing the command
+cat MisHawaii | sort -u | comm -12 - words > EngNHwii
+Some of the words that came out of that command are hawaiian, hell, howe,
+ile, keep, link, and mail
+
+Then we can compare the words that are mispelled in English but not in
+Hawaiian into a new file called HwiiNEng by doing the command
+cat MisEnglish | sort -u | comm -12 - hwords > HwiiNEng
+Some of the words that came out of the command are wiki, halau, and lau
