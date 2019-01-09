@@ -2,6 +2,10 @@
 
 Disclaimer: Don't copy this.
 
+| Assignment | Score | Date Graded |
+| ------------- | ------------- | ------------- |
+| 1 | 97/100 | 11/30/18
+| 2 | 92/100 | 11/30/18
 Assignment  1   97 / 100    11/30/2018
 
 Assignment  2   92 / 100	  11/30/2018	 	 
